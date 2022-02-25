@@ -10,7 +10,10 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
+    public NameTransfer NamePass;
     public Text ScoreText;
+    public Text BestScoreText;
+    public string BestScoreName;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -36,6 +39,11 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+
+        NamePass = GameObject.Find("NameStore").GetComponent<NameTransfer>();
+        BestScoreName = NamePass.theName;
+        BestScoreText.text = "Best Score:  " + BestScoreName + PlayerPrefs.GetInt("BestScore",0).ToString();
     }
 
     private void Update()
@@ -66,8 +74,18 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
-    }
+        if(m_Points > PlayerPrefs.GetInt("BestScore", 0))
+        {
+            PlayerPrefs.SetInt("BestScore", m_Points);
+            BestScoreText.text = "Best Score:  " + BestScoreName +" "+ PlayerPrefs.GetInt("BestScore", 0).ToString();
 
+        }
+    }
+    public void Reset()
+    {
+        PlayerPrefs.DeleteKey("BestScore");
+        BestScoreText.text = "Best Score:  " + BestScoreName + " " + PlayerPrefs.GetInt("BestScore", 0).ToString(); 
+    }
 
     public void GameOver()
     {

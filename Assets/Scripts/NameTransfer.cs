@@ -8,11 +8,21 @@ public class NameTransfer : MonoBehaviour
 {
     public string theName;
     public GameObject inputField;
-    public GameObject textDisplay;
+    
+    void Awake()
+    {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Name");
 
+        if (objs.Length > 1)
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
     public void StoreName()
     {
         theName = inputField.GetComponent<Text>().text;
-        textDisplay.GetComponent<Text>().text = theName;
+        
     }
 }
